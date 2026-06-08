@@ -1,0 +1,84 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Daily Quote</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#0a0a1a;color:#fff;min-height:100vh;display:flex;justify-content:center;align-items:center}
+.ob{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:1000;display:flex;justify-content:center;align-items:center}.ob.hide{display:none}
+.oc{background:#141428;border-radius:20px;padding:40px;max-width:500px;width:90%;text-align:center}
+.oc h2{color:#feca57;font-size:28px;margin-bottom:8px}.oc .sub{color:#888;font-size:14px}
+.stps{margin:25px 0;text-align:left;display:flex;flex-direction:column;gap:18px}
+.st{display:flex;gap:14px;align-items:flex-start}.st .n{width:32px;height:32px;border-radius:50%;background:#feca57;color:#000;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.st h4{font-size:14px;margin-bottom:2px}.st p{font-size:12px;color:#888;line-height:1.5}
+.oc button{padding:14px 40px;border:none;border-radius:10px;background:#feca57;color:#000;font-size:16px;font-weight:700;cursor:pointer}
+.oc .sk{color:#555;font-size:12px;cursor:pointer;margin-top:12px;display:inline-block}
+.app{display:none;max-width:600px;width:100%;padding:20px;text-align:center}.app.show{display:block}
+h1{margin-bottom:5px}h1 span{background:linear-gradient(90deg,#feca57,#e17055);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub2{color:#666;margin-bottom:25px;font-size:14px}
+.quote-card{background:linear-gradient(135deg,#1a1a3e,#2a2a5e);border-radius:20px;padding:40px 30px;margin-bottom:20px;border:1px solid #333;position:relative}
+.quote-card .mark{font-size:60px;color:#feca57;opacity:0.2;position:absolute;top:10px;left:20px;font-family:Georgia,serif}
+.quote-card .text{font-size:22px;line-height:1.6;font-style:italic;margin-bottom:15px;color:#e0e0e0}
+.quote-card .author{font-size:15px;color:#feca57;font-weight:600}
+.btns{display:flex;justify-content:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.btns button{padding:12px 24px;border:1px solid #333;border-radius:10px;background:transparent;color:#fff;cursor:pointer;font-size:14px}
+.btns button:hover{border-color:#feca57}
+.btns .primary{background:#feca57;color:#000;border:none;font-weight:600}
+.favorites{background:#141428;border-radius:14px;padding:15px;text-align:left}
+.favorites h3{color:#888;font-size:13px;margin-bottom:10px}
+.fav-item{padding:10px 0;border-bottom:1px solid #0a0a1a;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.fav-item:last-child{border:none}
+.fav-item .text{font-size:13px;font-style:italic;color:#ccc;flex:1}
+.fav-item .author{font-size:11px;color:#feca57}
+.fav-item .del{cursor:pointer;color:#444;font-size:14px;flex-shrink:0}.fav-item .del:hover{color:#ff6b6b}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#feca57;color:#000;padding:12px 24px;border-radius:10px;font-weight:600;opacity:0;transition:.3s}.toast.show{opacity:1}
+</style></head><body>
+<div class="ob" id="ob"><div class="oc">
+<h2>Daily Quote</h2><p class="sub">Get inspired every day</p>
+<div class="stps">
+<div class="st"><div class="n">1</div><div><h4>Read the Quote</h4><p>A random inspirational quote appears. Read it and reflect on its meaning.</p></div></div>
+<div class="st"><div class="n">2</div><div><h4>Save Favorites</h4><p>Click the Heart button to save quotes you love. They appear in your favorites list below.</p></div></div>
+<div class="st"><div class="n">3</div><div><h4>Share or Copy</h4><p>Click Copy to copy the quote text. Click Share to open a Twitter share window.</p></div></div>
+</div>
+<button onclick="start()">Get Inspired</button>
+<div class="sk" onclick="start()">Skip</div>
+</div></div>
+<div class="app" id="app">
+<h1><span>Daily Quote</span></h1><p class="sub2">Wisdom in words</p>
+<div class="quote-card" id="card"><div class="mark">&ldquo;</div><div class="text" id="qText">Loading...</div><div class="author" id="qAuthor"></div></div>
+<div class="btns"><button class="primary" onclick="newQuote()">New Quote</button><button onclick="saveFav()">Heart</button><button onclick="copyQuote()">Copy</button><button onclick="shareQuote()">Share</button></div>
+<div class="favorites"><h3>FAVORITES (<span id="favCnt">0</span>)</h3><div id="favList"></div></div></div>
+<div class="toast" id="toast">Copied!</div>
+<script>
+var quotes=[
+{t:"The only way to do great work is to love what you do.",a:"Steve Jobs"},
+{t:"In the middle of difficulty lies opportunity.",a:"Albert Einstein"},
+{t:"Life is what happens when you're busy making other plans.",a:"John Lennon"},
+{t:"The future belongs to those who believe in the beauty of their dreams.",a:"Eleanor Roosevelt"},
+{t:"It is during our darkest moments that we must focus to see the light.",a:"Aristotle"},
+{t:"The best time to plant a tree was 20 years ago. The second best time is now.",a:"Chinese Proverb"},
+{t:"Your time is limited, don't waste it living someone else's life.",a:"Steve Jobs"},
+{t:"Not everything that is faced can be changed, but nothing can be changed until it is faced.",a:"James Baldwin"},
+{t:"The only impossible journey is the one you never begin.",a:"Tony Robbins"},
+{t":"Success is not final, failure is not fatal: it is the courage to continue that counts.","a":"Winston Churchill"},
+{t:"Believe you can and you're halfway there.",a:"Theodore Roosevelt"},
+{t:"Act as if what you do makes a difference. It does.",a:"William James"},
+{t:"The purpose of our lives is to be happy.",a:"Dalai Lama"},
+{t:"Turn your wounds into wisdom.",a:"Oprah Winfrey"},
+{t:"The mind is everything. What you think you become.",a:"Buddha"},
+{t:"Strive not to be a success, but rather to be of value.",a:"Albert Einstein"},
+{t:"The only limit to our realization of tomorrow will be our doubts of today.",a:"Franklin D. Roosevelt"},
+{t:"Do what you can, with what you have, where you are.",a:"Theodore Roosevelt"},
+{t:"Everything you've ever wanted is on the other side of fear.",a:"George Addair"},
+{t:"Happiness is not something ready made. It comes from your own actions.",a:"Dalai Lama"}
+];
+var curQuote=null,favs=JSON.parse(localStorage.getItem('dq')||'[]');
+function start(){document.getElementById('ob').classList.add('hide');document.getElementById('app').classList.add('show');localStorage.setItem('dq_seen','1');newQuote();renderFavs()}
+if(localStorage.getItem('dq_seen')){document.getElementById('ob').classList.add('hide');document.getElementById('app').classList.add('show')}
+function newQuote(){curQuote=quotes[Math.floor(Math.random()*quotes.length)];
+document.getElementById('qText').textContent='\u201c'+curQuote.t+'\u201d';document.getElementById('qAuthor').textContent='\u2014 '+curQuote.a}
+function saveFav(){if(!curQuote)return;if(favs.some(function(f){return f.t===curQuote.t}))return;
+favs.unshift({t:curQuote.t,a:curQuote.a});localStorage.setItem('dq',JSON.stringify(favs));renderFavs()}
+function renderFavs(){document.getElementById('favCnt').textContent=favs.length;
+document.getElementById('favList').innerHTML=favs.map(function(f,i){
+return '<div class="fav-item"><div><div class="text">\u201c'+f.t+'\u201d</div><div class="author">\u2014 '+f.a+'</div></div><span class="del" onclick="delFav('+i+')">&times;</span></div>'}).join('')||'<p style="color:#555;font-size:12px">No favorites yet</p>'}
+function delFav(i){favs.splice(i,1);localStorage.setItem('dq',JSON.stringify(favs));renderFavs()}
+function copyQuote(){if(!curQuote)return;navigator.clipboard.writeText('\u201c'+curQuote.t+'\u201d \u2014 '+curQuote.a);var t=document.getElementById('toast');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1500)}
+function shareQuote(){if(!curQuote)return;var text=encodeURIComponent('\u201c'+curQuote.t+'\u201d \u2014 '+curQuote.a);window.open('https://twitter.com/intent/tweet?text='+text,'_blank')}
+newQuote();renderFavs();
+</script></body></html>
